@@ -1,23 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Enemy1 : MonoBehaviour
 {
+    public event Action<Enemy1> Destroyed; // Pass the enemy instance
     EnemyTypes enemy = new EnemyTypes();
 
-    // Start is called before the first frame update
+    private int score; 
+
     void Start()
     {
         enemy.Type(1);
-        enemy.Score(2);
+        score = 2; 
+        enemy.Score(score);
         enemy.Location(new Vector2(1, 2));
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroyed?.Invoke(this);
+
+            Destroy(gameObject);
+        }
+    }
+
+    public int GetScore()
+    {
+        return score; 
     }
 }
