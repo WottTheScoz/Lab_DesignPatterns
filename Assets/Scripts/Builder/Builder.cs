@@ -36,17 +36,21 @@ public class Builder : MonoBehaviour
     {
         if(timer >= maxTimer)
         {
-            GameObject newEnemy = Instantiate(EnemyObj);
-            newEnemy.AddComponent<EnemyBehaviour>();
-
-            int RNG = Random.Range(0, enemyTypes.Length);
-            newEnemy.GetComponent<EnemyBehaviour>().SetValues(enemyTypes[RNG]);
-
+            CreateEnemy();
             timer = 0;
         }
         else
         {
             timer += Time.deltaTime;
         }
+    }
+
+    void CreateEnemy()
+    {
+        GameObject newEnemy = Instantiate(EnemyObj);
+        newEnemy.AddComponent<EnemyBehaviour>();
+
+        int RNG = Random.Range(0, enemyTypes.Length);
+        newEnemy.GetComponent<EnemyBehaviour>().SetValues(enemyTypes[RNG]);
     }
 }
