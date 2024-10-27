@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
+
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class EnemyBehaviour : MonoBehaviour
     float maxTimer = 10f;
 
     SpriteRenderer colorRenderer;
+
+    public event Action<EnemyBehaviour> Destroyed;
 
     #region Unity Methods
     // Start is called before the first frame update
@@ -59,7 +63,7 @@ public class EnemyBehaviour : MonoBehaviour
         colorRenderer.color = color;
     }
 
-    int GetScore()
+    public int GetScore()
     {
         return score;
     }
@@ -94,6 +98,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         if(collision.gameObject.tag == "Bullet")
         {
+            Destroyed?.Invoke(this);
             Destroy(this.gameObject);
         }
     }
