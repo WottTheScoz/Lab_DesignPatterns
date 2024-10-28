@@ -5,6 +5,11 @@ using UnityEngine;
 public class Builder : MonoBehaviour
 {
     public GameObject EnemyObj;
+    List<GameObject> enemyList = new List<GameObject>();
+
+    public GameObject scoreManager;
+
+    public int maxEnemies = 20;
 
     float timer;
     float maxTimer = 1f;
@@ -30,19 +35,37 @@ public class Builder : MonoBehaviour
         enemyTypes[2] = enemyBuilder;
 
         timer = maxTimer;
+
+        for(int i = 0; i < maxEnemies; ++i)
+        {
+            CreateEnemy();
+        }
+
+        scoreManager.GetComponent<ScoreManager>().FindAllEnemies();
     }
 
     void Update()
     {
-        if(timer >= maxTimer)
+        if(enemyList.Count >= maxEnemies)
         {
-            CreateEnemy();
-            timer = 0;
+            if(timer >= maxTimer)
+            {
+                for(int i = 0; i < enemyList.Count; ++i)
+                {
+                    if(!enemyList[i].GetComponent<EnemyBehaviour>().GetStatus())
+                    {
+                        enemyList[i].GetComponent<EnemyBehaviour>().StartMovement();
+                        break;
+                    }
+                }
+                timer = 0;
+            }
+            else
+            {
+                timer += Time.deltaTime;
+            }
         }
-        else
-        {
-            timer += Time.deltaTime;
-        }
+        
     }
 
     void CreateEnemy()
@@ -52,5 +75,33 @@ public class Builder : MonoBehaviour
 
         int RNG = Random.Range(0, enemyTypes.Length);
         newEnemy.GetComponent<EnemyBehaviour>().SetValues(enemyTypes[RNG]);
+        
+        enemyList.Add(newEnemy);
+    }
+
+    public void CreateEnemyOfType(EnemyBuilder type, Vector3 position)
+    {
+        GameObject newEnemy = Instantiate(EnemyObj);
+        newEnemy.AddComponent<EnemyBehaviour>();
+
+        EnemyBuilder foundType = null;
+        foreach(EnemyBuilder enemyType in enemyTypes)
+        {
+            if(enemyType == foundType)
+            {
+                foundType = enemyType;
+                newEnemy.GetComponent<EnemyBehaviour>().SetValues(foundType);
+
+                newEnemy.transform.position = position;
+
+                enemyList.Add(newEnemy);
+                break;
+            }
+        }
+    }
+
+    public EnemyBuilder GetRecentEnemy()
+    {
+        return enemyList[enemyList.Count - 1].GetComponent<EnemyBehaviour>().GetEnemyBuilder();
     }
 }

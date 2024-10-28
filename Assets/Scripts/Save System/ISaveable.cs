@@ -12,6 +12,8 @@ public interface ISaveable
     void LoadFromData(SaveData data);
 }
 
+
+[System.Serializable]
 public class SaveData
 {
     public string saveID;
@@ -32,6 +34,7 @@ public class MyData : SaveData
 [System.Serializable]
 public class EnemyData : SaveData
 {
+    public EnemyBuilder type;
     public Vector3 position;
 }
 */
@@ -58,7 +61,7 @@ public static class SavingService
                 if (data != null)
                 {
                     data.saveID = saveableObject.SaveID;
-                    result.enemyObjects.Add(data);
+                    result.savedObjects.Add(data);
                 }
                 else
                 {
@@ -108,7 +111,7 @@ public static class SavingService
             foreach(var loadableObj in allLoadableObjects)
             {
                 // finds each set of MyData within loadedData (instance of SaveDataContainer)
-                foreach(SaveData savedObjects in loadedData.enemyObjects)
+                foreach(SaveData savedObjects in loadedData.savedObjects)
                 {
                     // checks if the loadableObj and savedObjects have the same ID
                     if(savedObjects.saveID.Equals(loadableObj.SaveID))
@@ -122,6 +125,7 @@ public static class SavingService
         
         return true;
     }
+
 
     // Bin save game method
     public static void SaveGameBin(string binFileName)
@@ -144,7 +148,7 @@ public static class SavingService
                 if (data != null)
                 {
                     data.saveID = saveableObject.SaveID;
-                    result.scoreObjects.Add(data);
+                    result.savedObjects.Add(data);
                 }
                 else
                 {
@@ -185,12 +189,13 @@ public static class SavingService
             foreach(var loadableObj in allLoadableObjects)
             {
                 // finds each set of MyData within loadedData (instance of SaveDataContainer)
-                foreach(SaveData savedObjects in loadedData.scoreObjects)
+                foreach(SaveData savedObjects in loadedData.savedObjects)
                 {
                     // checks if the loadableObj and savedObjects have the same ID
                     if(savedObjects.saveID.Equals(loadableObj.SaveID))
                     {
                         loadableObj.LoadFromData(savedObjects);
+                        Debug.Log("Got to this point");
                     }
                 }
             }
@@ -203,7 +208,7 @@ public static class SavingService
 [System.Serializable]
 public class SaveDataContainer
 {
-    //public List<SaveData> savedObjects = new List<SaveData>();
-    public List<SaveData> scoreObjects = new List<SaveData>();
-    public List<SaveData> enemyObjects = new List<SaveData>();
+    //public List<SaveData> scoreObjects = new List<SaveData>();
+    //public List<SaveData> enemyObjects = new List<SaveData>();
+    public List<SaveData> savedObjects = new List<SaveData>();
 }

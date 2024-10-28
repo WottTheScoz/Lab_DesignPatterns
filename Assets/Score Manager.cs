@@ -10,20 +10,34 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
+        UpdateScoreText();
+    }
+
+    public void FindAllEnemies()
+    {
         // Find all enemies in the scene and subscribe to their Destroyed events
         EnemyBehaviour[] enemies = FindObjectsOfType<EnemyBehaviour>();
         foreach (EnemyBehaviour enemy in enemies)
         {
-            enemy.Destroyed += OnEnemyDestroyed;
+            enemy.OnDeath += OnEnemyDestroyed;
         }
-
-        UpdateScoreText();
     }
 
-    private void OnEnemyDestroyed(EnemyBehaviour enemy)
+    public void SetScore(int newScore)
+    {
+        // Update the legacy UI Text with a specific score
+        scoreText.text = "Score: " + newScore;
+    }
+
+    public int GetScore()
+    {
+        return score;
+    }
+
+    private void OnEnemyDestroyed(int score)
     {
         // Increase the score based on the enemy's score value
-        score += enemy.GetScore();
+        this.score += score;
         UpdateScoreText();
     }
 

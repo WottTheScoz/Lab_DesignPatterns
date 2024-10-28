@@ -8,6 +8,8 @@ public class EnemyBehaviour : MonoBehaviour
 {
     public float maxHeight = 4;
 
+    bool isMoving;
+
     float speed = 1f;
     Color color = Color.white;
     int score = 1;
@@ -17,9 +19,15 @@ public class EnemyBehaviour : MonoBehaviour
     float timer;
     float maxTimer = 10f;
 
+    Vector3 initPosition;
+
     SpriteRenderer colorRenderer;
 
-    public event Action<EnemyBehaviour> Destroyed;
+    EnemyBuilder type;
+
+    //public event Action<EnemyBehaviour> Destroyed;
+    public delegate void EnemyDelegate(int score);
+    public event EnemyDelegate OnDeath;
 
     #region Unity Methods
     // Start is called before the first frame update
@@ -30,6 +38,8 @@ public class EnemyBehaviour : MonoBehaviour
         prevColor = color;
 
         SetInitialPosition();
+
+        initPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -46,7 +56,10 @@ public class EnemyBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
-        Movement();
+        if(isMoving)
+        {
+            Movement();
+        }
     }
     #endregion
 
@@ -56,6 +69,8 @@ public class EnemyBehaviour : MonoBehaviour
         speed = enemyBuilder.enemy.speed;
         color = enemyBuilder.enemy.color;
         score = enemyBuilder.enemy.score;
+
+        type = enemyBuilder;
     }
 
     void SetColor()
@@ -67,6 +82,16 @@ public class EnemyBehaviour : MonoBehaviour
     {
         return score;
     }
+
+    public EnemyBuilder GetEnemyBuilder()
+    {
+        return type;
+    }
+
+    public bool GetStatus()
+    {
+        return isMoving;
+    }
     #endregion
 
     #region Behaviour
@@ -77,20 +102,35 @@ public class EnemyBehaviour : MonoBehaviour
         transform.position = new Vector3(transform.position.x, RNG, transform.position.z);
     }
 
+    void ResetPosition()
+    {
+        transform.position = initPosition;
+    }
+
     void Movement()
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
     }
 
+    public void StartMovement()
+    {
+        isMoving = true;
+    }
+
     void ExistenceTimer()
     {
-        if(timer >= maxTimer)
+        if(isMoving)
         {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            timer += Time.deltaTime;
+            if(timer >= maxTimer)
+            {
+                //Destroy(this.gameObject);
+                ResetPosition();
+                isMoving = false;
+            }
+            else
+            {
+                timer += Time.deltaTime;
+            }
         }
     }
 
@@ -98,8 +138,10 @@ public class EnemyBehaviour : MonoBehaviour
     {
         if(collision.gameObject.tag == "Bullet")
         {
-            Destroyed?.Invoke(this);
-            Destroy(this.gameObject);
+            OnDeath?.Invoke(score);
+            ResetPosition();
+            isMoving = false;
+            //Destroy(this.gameObject);
         }
     }
     #endregion

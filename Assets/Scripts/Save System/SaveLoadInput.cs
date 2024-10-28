@@ -16,13 +16,13 @@ public class SaveLoadInput : MonoBehaviour
         if(Input.GetKeyDown("s"))
         {
             SavingService.SaveGame(jsonName);
-            //SavingService.SaveGameBin(binName);
+            SavingService.SaveGameBin(binName);
         }
 
         if(Input.GetKeyDown("l"))
         {
             SavingService.LoadGame(jsonName);
-            //SavingService.LoadGameBin(binName);
+            SavingService.LoadGameBin(binName);
             OnLoad?.Invoke();
         }
     }

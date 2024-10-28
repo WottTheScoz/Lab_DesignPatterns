@@ -2,29 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TransformSaver : MonoBehaviour, ISaveable
+public class ScoreSaver : MonoBehaviour, ISaveable
 {
-    public const string SAVE_ID = "enemy position";
+    public const string SAVE_ID = "score";
 
-    public GameObject saveSystemObj;
+    int savedScore;
 
-    EnemyBuilder enemyType;
-    Vector3 savedPosition;
-
-    SaveLoadInput saveSystem;
-    Builder builder;
+    ScoreManager scoreManager;
 
     void Start()
     {
-        saveSystem = saveSystemObj.GetComponent<SaveLoadInput>();
-        saveSystem.OnLoad += LoadEnemies;
-
-        builder = GetComponent<Builder>();
+        scoreManager = GetComponent<ScoreManager>();
     }
 
-    void LoadEnemies()
+    void LoadScore()
     {
-        builder.CreateEnemyOfType(enemyType, savedPosition);
+        scoreManager.SetScore(savedScore);
     }
 
     #region ISaveable
@@ -33,8 +26,7 @@ public class TransformSaver : MonoBehaviour, ISaveable
         get
         {
             var result = new SaveData();
-            result.type = builder.GetRecentEnemy();
-            result.position = transform.position;
+            result.score = scoreManager.GetScore();
             return result;
         }
     }
@@ -43,9 +35,8 @@ public class TransformSaver : MonoBehaviour, ISaveable
     {
         if(data.saveID.Equals(SAVE_ID))
         {
-            enemyType = data.type;
-            savedPosition = data.position;
-            LoadEnemies();
+            savedScore = data.score;
+            LoadScore();
         }
     }
 

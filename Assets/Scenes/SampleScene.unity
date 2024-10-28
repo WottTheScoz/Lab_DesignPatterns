@@ -424,6 +424,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyObj: {fileID: 7814194312538258731, guid: 3317eaa05bd9922469ae9539f4524b92, type: 3}
+  scoreManager: {fileID: 705252830}
+  maxEnemies: 20
 --- !u!4 &598849137
 Transform:
   m_ObjectHideFlags: 0
