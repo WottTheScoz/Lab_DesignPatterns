@@ -5,26 +5,27 @@ using UnityEngine;
 public class TransformSaver : MonoBehaviour, ISaveable
 {
     public const string SAVE_ID = "enemy position";
-
-    public GameObject saveSystemObj;
-
-    EnemyBuilder enemyType;
+    
+    float savedSpeed;
     Vector3 savedPosition;
 
-    SaveLoadInput saveSystem;
-    Builder builder;
+    EnemyBehaviour enemyBehaviour;
 
     void Start()
     {
-        saveSystem = saveSystemObj.GetComponent<SaveLoadInput>();
-        saveSystem.OnLoad += LoadEnemies;
-
-        builder = GetComponent<Builder>();
+        enemyBehaviour = GetComponent<EnemyBehaviour>();
+        savedSpeed = enemyBehaviour.GetSpeed();
     }
 
     void LoadEnemies()
     {
-        builder.CreateEnemyOfType(enemyType, savedPosition);
+        transform.position = savedPosition;
+        enemyBehaviour.SetSpeed(savedSpeed);
+    }
+
+    public void AddToSaveKey(int enemyNum)
+    {
+        _saveID += " " + enemyNum;
     }
 
     #region ISaveable
@@ -33,7 +34,7 @@ public class TransformSaver : MonoBehaviour, ISaveable
         get
         {
             var result = new SaveData();
-            result.type = builder.GetRecentEnemy();
+            result.speed = savedSpeed;
             result.position = transform.position;
             return result;
         }
@@ -41,9 +42,9 @@ public class TransformSaver : MonoBehaviour, ISaveable
 
     public void LoadFromData(SaveData data)
     {
-        if(data.saveID.Equals(SAVE_ID))
+        if(data.saveID.Equals(SaveID))
         {
-            enemyType = data.type;
+            savedSpeed = data.speed;
             savedPosition = data.position;
             LoadEnemies();
         }

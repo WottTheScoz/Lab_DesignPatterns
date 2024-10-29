@@ -77,6 +77,8 @@ public class Builder : MonoBehaviour
         newEnemy.GetComponent<EnemyBehaviour>().SetValues(enemyTypes[RNG]);
         
         enemyList.Add(newEnemy);
+
+        newEnemy.GetComponent<TransformSaver>().AddToSaveKey(enemyList.Count - 1);
     }
 
     public void CreateEnemyOfType(EnemyBuilder type, Vector3 position)
@@ -100,8 +102,8 @@ public class Builder : MonoBehaviour
         }
     }
 
-    public EnemyBuilder GetRecentEnemy()
+    /*public EnemyBuilder GetRecentEnemy()
     {
         return enemyList[enemyList.Count - 1].GetComponent<EnemyBehaviour>().GetEnemyBuilder();
-    }
+    }*/
 }

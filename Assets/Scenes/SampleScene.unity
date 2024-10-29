@@ -403,7 +403,6 @@ GameObject:
   m_Component:
   - component: {fileID: 598849137}
   - component: {fileID: 598849136}
-  - component: {fileID: 598849138}
   m_Layer: 0
   m_Name: EnemyBuilder
   m_TagString: Untagged
@@ -441,19 +440,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &598849138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 598849135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0913bd7f42ee81f408dccd5ca3cd717b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveSystemObj: {fileID: 681909966}
 --- !u!1 &681909966
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705252832}
   - component: {fileID: 705252831}
+  - component: {fileID: 705252833}
   m_Layer: 0
   m_Name: Score manager
   m_TagString: Untagged
@@ -543,6 +530,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &705252833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705252830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf1e260edc352d4a96a3d61584b469c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &907797920
 PrefabInstance:
   m_ObjectHideFlags: 0

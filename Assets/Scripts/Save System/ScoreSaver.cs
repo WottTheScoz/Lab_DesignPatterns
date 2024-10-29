@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreSaver : MonoBehaviour, ISaveable
+public class ScoreSaver : MonoBehaviour, ISaveableBin
 {
     public const string SAVE_ID = "score";
 
@@ -21,17 +21,17 @@ public class ScoreSaver : MonoBehaviour, ISaveable
     }
 
     #region ISaveable
-    public SaveData SavedData
+    public ScoreData ScoreData
     {
         get
         {
-            var result = new SaveData();
+            var result = new ScoreData();
             result.score = scoreManager.GetScore();
             return result;
         }
     }
 
-    public void LoadFromData(SaveData data)
+    public void LoadFromData(ScoreData data)
     {
         if(data.saveID.Equals(SAVE_ID))
         {

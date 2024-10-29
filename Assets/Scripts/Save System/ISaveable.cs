@@ -12,32 +12,29 @@ public interface ISaveable
     void LoadFromData(SaveData data);
 }
 
+public interface ISaveableBin
+{
+    string SaveID { get; }
+    ScoreData ScoreData { get; }
+    void LoadFromData(ScoreData data);
+}
+
 
 [System.Serializable]
 public class SaveData
 {
     public string saveID;
-    public int score;
-    public EnemyBuilder type;
+    //public int score;
+    public float speed;
     public Vector3 position;
 }
 
-/*
-// Class that represents player save data
 [System.Serializable]
-public class MyData : SaveData
+public class ScoreData
 {
+    public string saveID;
     public int score;
 }
-
-// Represents enemy save data
-[System.Serializable]
-public class EnemyData : SaveData
-{
-    public EnemyBuilder type;
-    public Vector3 position;
-}
-*/
 
 // Contains all save and load methods
 public static class SavingService
@@ -130,25 +127,25 @@ public static class SavingService
     // Bin save game method
     public static void SaveGameBin(string binFileName)
     {
-        var result = new SaveDataContainer(); // Create a container for your data
-
+        var result = new ScoreData();
+        
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), binFileName);
 
         BinaryFormatter formatter = new BinaryFormatter();
 
-        var allSaveableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>();
+        var allSaveableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveableBin>();
 
         // Searches for all saveable objects and saves their data to result
         if(allSaveableObjects.Any())
         {
             foreach(var saveableObject in allSaveableObjects)
             {
-                var data = saveableObject.SavedData;
+                var data = saveableObject.ScoreData;
 
                 if (data != null)
                 {
                     data.saveID = saveableObject.SaveID;
-                    result.savedObjects.Add(data);
+                    result = data;
                 }
                 else
                 {
@@ -177,26 +174,21 @@ public static class SavingService
     {
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), binFileName);
 
-        var allLoadableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>();
+        var allLoadableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveableBin>();
 
         BinaryFormatter formatter = new BinaryFormatter();
 
         using(FileStream saveFile = File.Open(filePath, FileMode.Open))
         {
-            SaveDataContainer loadedData = (SaveDataContainer) formatter.Deserialize(saveFile);
+            ScoreData loadedData = (ScoreData) formatter.Deserialize(saveFile);
 
             // finds every object of type ISaveable
             foreach(var loadableObj in allLoadableObjects)
             {
-                // finds each set of MyData within loadedData (instance of SaveDataContainer)
-                foreach(SaveData savedObjects in loadedData.savedObjects)
+                 // checks if the loadableObj and savedObjects have the same ID
+                if(loadedData.saveID.Equals(loadableObj.SaveID))
                 {
-                    // checks if the loadableObj and savedObjects have the same ID
-                    if(savedObjects.saveID.Equals(loadableObj.SaveID))
-                    {
-                        loadableObj.LoadFromData(savedObjects);
-                        Debug.Log("Got to this point");
-                    }
+                    loadableObj.LoadFromData(loadedData);
                 }
             }
         }

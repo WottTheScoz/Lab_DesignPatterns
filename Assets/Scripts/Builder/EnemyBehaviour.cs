@@ -23,7 +23,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     SpriteRenderer colorRenderer;
 
-    EnemyBuilder type;
+    //EnemyBuilder type;
 
     //public event Action<EnemyBehaviour> Destroyed;
     public delegate void EnemyDelegate(int score);
@@ -70,7 +70,7 @@ public class EnemyBehaviour : MonoBehaviour
         color = enemyBuilder.enemy.color;
         score = enemyBuilder.enemy.score;
 
-        type = enemyBuilder;
+        //type = enemyBuilder;
     }
 
     void SetColor()
@@ -78,15 +78,25 @@ public class EnemyBehaviour : MonoBehaviour
         colorRenderer.color = color;
     }
 
+    public void SetSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+    }
+
     public int GetScore()
     {
         return score;
     }
 
-    public EnemyBuilder GetEnemyBuilder()
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
+    /*public EnemyBuilder GetEnemyBuilder()
     {
         return type;
-    }
+    }*/
 
     public bool GetStatus()
     {
