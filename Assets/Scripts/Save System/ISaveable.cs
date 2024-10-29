@@ -51,7 +51,7 @@ public static class SavingService
         var result = new SaveDataContainer(); // Create a container for your data
         var allSaveableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>();
 
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+        string filePath = Path.Combine(Application.persistentDataPath, fileName);
 
         // Searches for all saveable objects and saves their data to result
         if (allSaveableObjects.Any())
@@ -92,7 +92,7 @@ public static class SavingService
         SaveDataContainer loadedData;
         var allLoadableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>();
 
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+        string filePath = Path.Combine(Application.persistentDataPath, fileName);
 
         if(allLoadableObjects.Any())
         {
@@ -134,7 +134,7 @@ public static class SavingService
     {
         var result = new ScoreData();
         
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), binFileName);
+        string filePath = Path.Combine(Application.persistentDataPath, binFileName);
 
         BinaryFormatter formatter = new BinaryFormatter();
 
@@ -177,7 +177,7 @@ public static class SavingService
     // Bin load game method
     public static void LoadGameBin(string binFileName)
     {
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), binFileName);
+        string filePath = Path.Combine(Application.persistentDataPath, binFileName);
 
         var allLoadableObjects = Object.FindObjectsOfType<MonoBehaviour>().OfType<ISaveableBin>();
 
