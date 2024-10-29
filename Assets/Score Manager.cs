@@ -26,7 +26,8 @@ public class ScoreManager : MonoBehaviour
     public void SetScore(int newScore)
     {
         // Update the legacy UI Text with a specific score
-        scoreText.text = "Score: " + newScore;
+        score = newScore;
+        UpdateScoreText();
     }
 
     public int GetScore()

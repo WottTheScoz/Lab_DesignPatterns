@@ -83,6 +83,11 @@ public class EnemyBehaviour : MonoBehaviour
         speed = newSpeed;
     }
 
+    public void SetTimer(float newTime)
+    {
+        timer = newTime;
+    }
+
     public int GetScore()
     {
         return score;
@@ -93,10 +98,10 @@ public class EnemyBehaviour : MonoBehaviour
         return speed;
     }
 
-    /*public EnemyBuilder GetEnemyBuilder()
+    public float GetTimer()
     {
-        return type;
-    }*/
+        return timer;
+    }
 
     public bool GetStatus()
     {
@@ -133,9 +138,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             if(timer >= maxTimer)
             {
-                //Destroy(this.gameObject);
                 ResetPosition();
-                isMoving = false;
             }
             else
             {

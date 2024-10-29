@@ -12,6 +12,7 @@ public interface ISaveable
     void LoadFromData(SaveData data);
 }
 
+// ISaveable for bin information
 public interface ISaveableBin
 {
     string SaveID { get; }
@@ -19,16 +20,20 @@ public interface ISaveableBin
     void LoadFromData(ScoreData data);
 }
 
-
+// Stores player and enemy save data; written into a Json file
 [System.Serializable]
 public class SaveData
 {
     public string saveID;
-    //public int score;
-    public float speed;
-    public Vector3 position;
+
+    public Vector3 playerPosition;
+
+    public float enemyStartTimer;
+    public float enemySpeed;
+    public Vector3 enemyPosition;
 }
 
+// Stores score data; written into a binary file
 [System.Serializable]
 public class ScoreData
 {
@@ -200,7 +205,5 @@ public static class SavingService
 [System.Serializable]
 public class SaveDataContainer
 {
-    //public List<SaveData> scoreObjects = new List<SaveData>();
-    //public List<SaveData> enemyObjects = new List<SaveData>();
     public List<SaveData> savedObjects = new List<SaveData>();
 }

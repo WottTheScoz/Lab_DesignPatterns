@@ -5,7 +5,8 @@ using UnityEngine;
 public class TransformSaver : MonoBehaviour, ISaveable
 {
     public const string SAVE_ID = "enemy position";
-    
+
+    float savedTimer;
     float savedSpeed;
     Vector3 savedPosition;
 
@@ -15,12 +16,14 @@ public class TransformSaver : MonoBehaviour, ISaveable
     {
         enemyBehaviour = GetComponent<EnemyBehaviour>();
         savedSpeed = enemyBehaviour.GetSpeed();
+        savedTimer = enemyBehaviour.GetTimer();
     }
 
     void LoadEnemies()
     {
         transform.position = savedPosition;
         enemyBehaviour.SetSpeed(savedSpeed);
+        enemyBehaviour.SetTimer(savedTimer);
     }
 
     public void AddToSaveKey(int enemyNum)
@@ -34,8 +37,9 @@ public class TransformSaver : MonoBehaviour, ISaveable
         get
         {
             var result = new SaveData();
-            result.speed = savedSpeed;
-            result.position = transform.position;
+            result.enemyStartTimer = savedTimer;
+            result.enemySpeed = savedSpeed;
+            result.enemyPosition = transform.position;
             return result;
         }
     }
@@ -44,8 +48,9 @@ public class TransformSaver : MonoBehaviour, ISaveable
     {
         if(data.saveID.Equals(SaveID))
         {
-            savedSpeed = data.speed;
-            savedPosition = data.position;
+            savedTimer = data.enemyStartTimer;
+            savedSpeed = data.enemySpeed;
+            savedPosition = data.enemyPosition;
             LoadEnemies();
         }
     }

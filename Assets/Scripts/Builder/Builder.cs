@@ -50,14 +50,7 @@ public class Builder : MonoBehaviour
         {
             if(timer >= maxTimer)
             {
-                for(int i = 0; i < enemyList.Count; ++i)
-                {
-                    if(!enemyList[i].GetComponent<EnemyBehaviour>().GetStatus())
-                    {
-                        enemyList[i].GetComponent<EnemyBehaviour>().StartMovement();
-                        break;
-                    }
-                }
+                StartEnemyMovement();
                 timer = 0;
             }
             else
@@ -81,29 +74,15 @@ public class Builder : MonoBehaviour
         newEnemy.GetComponent<TransformSaver>().AddToSaveKey(enemyList.Count - 1);
     }
 
-    public void CreateEnemyOfType(EnemyBuilder type, Vector3 position)
+    void StartEnemyMovement()
     {
-        GameObject newEnemy = Instantiate(EnemyObj);
-        newEnemy.AddComponent<EnemyBehaviour>();
-
-        EnemyBuilder foundType = null;
-        foreach(EnemyBuilder enemyType in enemyTypes)
+        for(int i = 0; i < enemyList.Count; ++i)
         {
-            if(enemyType == foundType)
+            if(!enemyList[i].GetComponent<EnemyBehaviour>().GetStatus())
             {
-                foundType = enemyType;
-                newEnemy.GetComponent<EnemyBehaviour>().SetValues(foundType);
-
-                newEnemy.transform.position = position;
-
-                enemyList.Add(newEnemy);
+                enemyList[i].GetComponent<EnemyBehaviour>().StartMovement();
                 break;
             }
         }
     }
-
-    /*public EnemyBuilder GetRecentEnemy()
-    {
-        return enemyList[enemyList.Count - 1].GetComponent<EnemyBehaviour>().GetEnemyBuilder();
-    }*/
 }
